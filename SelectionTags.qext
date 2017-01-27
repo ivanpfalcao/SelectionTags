@@ -1,0 +1,15 @@
+{
+	"name": "SelectionTags",
+	"description": "A new visualization for a selections bar",
+	"icon": "table",
+	"type": "visualization",
+	"version": "1.0.0",
+	"author": "Ivan Falcao",
+	"homepage": "",
+	"keywords": "qlik-sense, visualization",
+	"license": "GPL-3.0",
+	"repository": "",
+	"dependencies": {
+		"qlik-sense": ">=2.1.x"
+	}
+}
