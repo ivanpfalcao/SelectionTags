@@ -47,32 +47,37 @@ define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"
 			}
 
 			
-			//XXXX
+			//Generate View
 			app = qlik.currApp(this);
 			var selectionState = app.selectionState;
             var selections = app.getList("CurrentSelections", function(reply) {
 				globalSelectedFields = reply.qSelectionObject.qSelections;
 				var globalSelectedFieldsLength = globalSelectedFields.length,html = "";
+				html+='<div class="qstag-container">';
+				var tagBackgroundColor='#c2d6d6';
+				var tagFontColor='#000000';
 				
 				for (var i = 0; i < globalSelectedFieldsLength; i++) {
 						
 						var selectedValues = globalSelectedFields[i].qSelected;
 						var splittedSelectedValues = selectedValues.split(", ");
 						for (var j = 0; j < splittedSelectedValues.length; j++) {
-							//var tagValue = globalSelectedFields[i].qField + ' : ' + globalSelectedFields[i].qSelected;
 							var tagValue = globalSelectedFields[i].qField + ' : ' + splittedSelectedValues[j];
 							var tagIP = globalSelectedFields[i].qField + '||-||' + splittedSelectedValues[j]+ '||-||' + i + '||-||' + j;
-							html+='<div class="qstag-container"><ul class="qstag-taglist">';
-                     		html+='<li style="opacity: 1;" data-tag="tag" class="qstag-tag"><div class="qstag-tag-content"><span class="qstag-tag-text">' + tagValue +'</span><a class="qstag-tag-remove" id="' + tagIP + '"></a></div></li>';
-							html+='</ul></div>'
+							html+='<ul class="qstag-taglist">';
+                     		html+='<li style="background-color:'+ tagBackgroundColor +';color:' + tagFontColor + ';opacity: 1;" data-tag="tag" class="qstag-tag"><div class="qstag-tag-content"><span class="qstag-tag-text">' + tagValue +'</span><a class="qstag-tag-remove" id="' + tagIP + '"></a></div></li>';
+							html+='</ul>'
 						}
                 }																
 				
 				$element.empty();
 				$element.append(html);
 				
+				//Generate View - End
 				
 				
+				
+				//Action when clicked
 				$( ".qstag-tag-remove" ).click(function() {
 					var clickedID = this.id;	
 					var splittedID = clickedID.split('||-||');
@@ -109,15 +114,12 @@ define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"
 					*/
 					
 					
-				});				
+				});	
+				
+				//Action when clicked - End
 				
 				
-            });
-			
-			//XXXX			
-			
-			
-			
+            });														
 		},
 		controller: ['$scope', function (/*$scope*/) {
 		}]
