@@ -21,34 +21,34 @@
 }
 
 
-.mb-container {
+.qstag-container {
   overflow: hidden;
 }
-.mb-container ul.mb-taglist {
+.qstag-container ul.qstag-taglist {
   padding: 0;
   margin: 0;
   overflow: hidden;
   float: left;
 }
-.mb-meta {
+.qstag-meta {
   float: left;
   overflow: hidden;
   padding-left: 5px;
 }
-.mb-tag-content {
+.qstag-tag-content {
   overflow: hidden;
   white-space: nowrap;
 }
-.mb-help-text {
+.qstag-help-text {
   margin-left: 5px;
   font-family: sans-serif;
 }
-.mb-container.mb-error .mb-input {
+.qstag-container.qstag-error .qstag-input {
   border: 1px solid red;
   outline: red;
 }
 
-.mb-add-button {
+.qstag-add-button {
   padding: 4px 8px;
   margin-left: 5px;
   font-size: 14px;
@@ -71,7 +71,7 @@
 
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false); 
 }
-.mb-container li.mb-tag {
+.qstag-container li.qstag-tag {
   overflow: hidden;
   font-family: arial, serif;
   float: left;
@@ -85,10 +85,10 @@
   border-radius: 4px;
   font-size: 1em;
 }
-.mb-container .mb-input-container {
+.qstag-container .qstag-input-container {
   float: right;
 }
-.mb-container .mb-input {
+.qstag-container .qstag-input {
   float: left;
   border: 1px solid #c0c0c0;
   -webkit-border-radius: 4px;
@@ -99,7 +99,7 @@
   margin: 2px 0 0 0;
 }
 
-.mb-container a.mb-tag-remove {
+.qstag-container a.qstag-tag-remove {
   cursor: pointer;
   text-decoration: none;
   display: inline-block;

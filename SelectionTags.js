@@ -3,7 +3,7 @@ var fieldsTranslations = [{
     Field: ""
 }];
 
-var mySelectedFields; // Global selected fields
+var globalSelectedFields; // Global selected fields
 var app; // Global app
 
 define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"], function (qlik, $, cssContent, template ) {'use strict';
@@ -45,46 +45,73 @@ define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"
 			if ( !this.$scope.table ) {
 				this.$scope.table = qlik.table( this );
 			}
+
 			
 			//XXXX
 			app = qlik.currApp(this);
 			var selectionState = app.selectionState;
             var selections = app.getList("CurrentSelections", function(reply) {
-				mySelectedFields = reply.qSelectionObject.qSelections;
-				var mySelectedFieldsLength = mySelectedFields.length,html = "";
+				globalSelectedFields = reply.qSelectionObject.qSelections;
+				var globalSelectedFieldsLength = globalSelectedFields.length,html = "";
 				
-				
-				//html+='<li style="opacity: 1;" data-tag="tag" class="mb-tag"><div class="mb-tag-content"><span class="mb-tag-text">tag</span><a class="mb-tag-remove"></a></div></li>';
-				//html+='<li style="opacity: 1;" data-tag="tag" class="mb-tag"><div class="mb-tag-content"><span class="mb-tag-text">tag</span><a class="mb-tag-remove"></a></div></li>';
-				//html+='<li style="opacity: 1;" data-tag="tag" class="mb-tag"><div class="mb-tag-content"><span class="mb-tag-text">tag</span><a class="mb-tag-remove"></a></div></li>';
-				for (var i = 0; i < mySelectedFieldsLength; i++) {
+				for (var i = 0; i < globalSelectedFieldsLength; i++) {
 						
-						var selectedValues = mySelectedFields[i].qSelected;
+						var selectedValues = globalSelectedFields[i].qSelected;
 						var splittedSelectedValues = selectedValues.split(", ");
 						for (var j = 0; j < splittedSelectedValues.length; j++) {
-							//var tagValue = mySelectedFields[i].qField + ' : ' + mySelectedFields[i].qSelected;
-							var tagValue = mySelectedFields[i].qField + ' : ' + splittedSelectedValues[j];
-							html+='<div class="mb-container"><ul class="mb-taglist">';
-                     		html+='<li style="opacity: 1;" data-tag="tag" class="mb-tag"><div class="mb-tag-content"><span class="mb-tag-text">' + tagValue +'</span><a class="mb-tag-remove"></a></div></li>';
+							//var tagValue = globalSelectedFields[i].qField + ' : ' + globalSelectedFields[i].qSelected;
+							var tagValue = globalSelectedFields[i].qField + ' : ' + splittedSelectedValues[j];
+							var tagIP = globalSelectedFields[i].qField + '||-||' + splittedSelectedValues[j]+ '||-||' + i + '||-||' + j;
+							html+='<div class="qstag-container"><ul class="qstag-taglist">';
+                     		html+='<li style="opacity: 1;" data-tag="tag" class="qstag-tag"><div class="qstag-tag-content"><span class="qstag-tag-text">' + tagValue +'</span><a class="qstag-tag-remove" id="' + tagIP + '"></a></div></li>';
 							html+='</ul></div>'
 						}
-                }
-				
-				
-				
-				
-			
-				/*
-                html += '<table id="mySelections" class="qv-object-currentSelections"><tr><th>Field</th><th>Count</th><th>Values</th></tr>';
-                for (var i = 0; i < mySelectedFieldsLength; i++) {
-                     html += "<tr onclick='removeMySelection(" + i + ");'><td>" + translateField(mySelectedFields[i].qField) + '</td><td>' + mySelectedFields[i].qSelectedCount + ' of ' + mySelectedFields[i].qTotal + '</td><td>' + mySelectedFields[i].qSelected + '</td></tr>';
-                }
-                html += '</table>';	
-				
-				*/
+                }																
 				
 				$element.empty();
 				$element.append(html);
+				
+				
+				
+				$( ".qstag-tag-remove" ).click(function() {
+					var clickedID = this.id;	
+					var splittedID = clickedID.split('||-||');
+					var fieldName = splittedID[0];
+					var selectedValue = splittedID[1];
+					var fieldID = splittedID[2];
+					var valueID = splittedID[3];
+					app.field(fieldName).toggleSelect(selectedValue, true);
+					//alert(fieldName+';'+selectedValue);
+					//alert(fieldName);
+					//alert(selectedValue);
+					
+					//var arrayIDs = ['{qText: "' + selectedValue + '"}'];				
+					//app.field(fieldName).selectValues(arrayIDs, false,true);
+					//app.field(fieldName).lock();
+					//app.field(fieldName).selectValues([selectedValue], true,true);
+					//app.field(fieldName).unlock();
+					
+					
+					/*
+					var globalSelectedFieldsLength = globalSelectedFields.length,html = "";
+					app.clearAll();
+					for (var i = 0; i < globalSelectedFieldsLength; i++) {
+						var selectedValues = globalSelectedFields[i].qSelected;
+						var splittedSelectedValues = selectedValues.split(", ");
+						var valuesArray = [];
+						for (var j = 0; j < splittedSelectedValues.length; j++) {
+							if ((i != fieldID)||(j!=valueID)) {
+								valuesArray[j] = splittedSelectedValues[j];
+							}					
+						}
+						app.field(globalSelectedFields[i].qField).selectValues(valuesArray, true,true);
+					}
+					*/
+					
+					
+				});				
+				
+				
             });
 			
 			//XXXX			
@@ -97,37 +124,3 @@ define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"
 	};
 
 } );
-
-
-function removeMySelection(index) {
-    app.clearAll();
-    var mySelectedFieldsLength = mySelectedFields.length;
-    var selectedFields = mySelectedFields.slice();
-    for (var i = 0; i < mySelectedFieldsLength; i++) {
-        if (i == index) {
-            continue;
-        }
-        var field = selectedFields[i].qField;
-        var fieldSelectionInfoLength = selectedFields[i].qSelectedFieldSelectionInfo.length;
-        var names = [];
-        for (var j = 0; j < fieldSelectionInfoLength; j++) {
-            var name = selectedFields[i].qSelectedFieldSelectionInfo[j].qName;
-            if (isNaN(name)) {
-                names[j] = name;
-            } else {
-                names[j] = parseInt(name);
-            }
-        }
-        app.field(field).selectValues(names, false, true)
-    }
-}
-
-function translateField(field) {
-    var size = fieldsTranslations.length;
-    for (var i = 0; i < size; i++) {
-        if (fieldsTranslations[i].Field == field) {
-            return fieldsTranslations[i].Label;
-        }
-    }
-    return field;
-}
