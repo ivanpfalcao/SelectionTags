@@ -1,12 +1,12 @@
 {
 	"name": "SelectionTags",
-	"description": "A new visualization for a selections bar",
+	"description": "Tags view for selected items",
 	"icon": "table",
 	"type": "visualization",
 	"version": "1.0.0",
 	"author": "Ivan Falcao",
 	"homepage": "",
-	"keywords": "qlik-sense, visualization",
+	"keywords": "qlik-sense, visualization, tags",
 	"license": "GPL-3.0",
 	"repository": "",
 	"dependencies": {
