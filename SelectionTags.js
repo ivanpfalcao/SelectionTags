@@ -50,11 +50,12 @@ define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"
 					itemTitleRef: "label",               
 					allowAdd: true,                      
 					allowRemove: true,                   
-					addTranslation: "Add Item",          
+					addTranslation: "Add Item",    					
 					items: {                                                             
-						fieldName: {                           
+						label: {                           
 							type: "string",                  
-							ref: "fieldName",                    
+							//ref: "fieldName",                    
+							ref: "label",                    
 							label: "Field Name",                  
 							expression: "always",          
 							defaultValue: "Field Name"            
@@ -128,7 +129,7 @@ define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"
 				var dictBgColor = new Array();
 				var dictFontColor = new Array();
 				for (var i=0; i<lenItems;i++){
-					var fieldName = layout.layoutList[i].fieldName;
+					var fieldName = layout.layoutList[i].label;
 					var backgroundColor = layout.layoutList[i].backgroundColor;
 					var fontColor = layout.layoutList[i].fontColor;
 					dictBgColor[fieldName] = backgroundColor;
