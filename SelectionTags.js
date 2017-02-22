@@ -77,6 +77,7 @@ define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"
 							defaultValue: "CommaSep"
 						},	
 						*/
+						/*
 						backgroundColor: {
 							label:"Background Color",
 							component: "color-picker",
@@ -91,6 +92,24 @@ define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"
 							type: "integer",
 							defaultValue: 10
 						}
+						*/
+						
+						backgroundColor: {                           
+							type: "string",                  
+							//ref: "fieldName",                    
+							ref: "backgroundColor",                    
+							label: "Background Color",                  
+							expression: "always",          
+							defaultValue: "#b0afae"            
+						}, 			
+						fontColor: {                           
+							type: "string",                  
+							//ref: "fieldName",                    
+							ref: "fontColor",                    
+							label: "Font Color",                  
+							expression: "always",       
+							defaultValue: "#276e27"            
+						}					
 					}                                    
 				} 
 			}
@@ -132,6 +151,8 @@ define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"
 					var fieldName = layout.layoutList[i].label;
 					var backgroundColor = layout.layoutList[i].backgroundColor;
 					var fontColor = layout.layoutList[i].fontColor;
+					//dictBgColor[fieldName] = backgroundColor;
+					//dictFontColor[fieldName] = fontColor;
 					dictBgColor[fieldName] = backgroundColor;
 					dictFontColor[fieldName] = fontColor;
 				}
@@ -141,10 +162,13 @@ define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"
 						
 						var selectedValues = globalSelectedFields[i].qSelected;
 						var splittedSelectedValues = selectedValues.split(", ");
-						
-						if (typeof dictBgColor[globalSelectedFields[i].qField] != 'undefined') {
-							var tagBackgroundColor=palette[dictBgColor[globalSelectedFields[i].qField]];
-							var tagFontColor=palette[dictFontColor[globalSelectedFields[i].qField]];
+						//alert(globalSelectedFields[i].qField);
+						if (typeof dictBgColor[globalSelectedFields[i].qField] != '') {
+							//var tagBackgroundColor=palette[dictBgColor[globalSelectedFields[i].qField]];
+							//var tagFontColor=palette[dictFontColor[globalSelectedFields[i].qField]];
+							var tagBackgroundColor=dictBgColor[globalSelectedFields[i].qField];
+							var tagFontColor=dictFontColor[globalSelectedFields[i].qField];
+							
 							var tagFontFamily='Arial';
 						} else {
 							var tagBackgroundColor='#c2d6d6';
