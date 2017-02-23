@@ -60,6 +60,14 @@ define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"
 							expression: "always",          
 							defaultValue: "Field Name"            
 						}, 
+						fieldLabel: {                           
+							type: "string",                  
+							//ref: "fieldName",                    
+							ref: "fieldLabel",                    
+							label: "Field Label",                  
+							expression: "always",          
+							defaultValue: "Field Label"            
+						}, 						
 						/*		
 						DropDownDecSep: {
 							type: "string",
@@ -147,6 +155,7 @@ define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"
 
 				var dictBgColor = new Array();
 				var dictFontColor = new Array();
+				var dictAlias = new Array();
 				for (var i=0; i<lenItems;i++){
 					var fieldName = layout.layoutList[i].label;
 					var backgroundColor = layout.layoutList[i].backgroundColor;
@@ -155,6 +164,9 @@ define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"
 					//dictFontColor[fieldName] = fontColor;
 					dictBgColor[fieldName] = backgroundColor;
 					dictFontColor[fieldName] = fontColor;
+					
+					dictAlias[fieldName]=layout.layoutList[i].fieldLabel;
+
 				}
 				
 				
@@ -179,7 +191,15 @@ define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"
 						
 						
 						for (var j = 0; j < splittedSelectedValues.length; j++) {
-							var tagValue = globalSelectedFields[i].qField + ' : ' + splittedSelectedValues[j];
+							if (typeof dictAlias[globalSelectedFields[i].qField] === "undefined"
+								|| dictAlias[globalSelectedFields[i].qField] == "Field Label" 
+								|| dictAlias[globalSelectedFields[i].qField] == "") {
+								vAlias = globalSelectedFields[i].qField;
+							} else {
+								var vAlias = dictAlias[globalSelectedFields[i].qField];
+							}
+							
+							var tagValue = vAlias + ' : ' + splittedSelectedValues[j];
 							var tagIP = globalSelectedFields[i].qField + '||-||' + splittedSelectedValues[j]+ '||-||' + i + '||-||' + j;
 							html+='<ul class="qstag-taglist">';
                      		html+='<li style="background-color:'+ tagBackgroundColor +';color:' + tagFontColor + ';opacity: 1;" data-tag="tag" class="qstag-tag"><div class="qstag-tag-content"><span class="qstag-tag-text"><p style="font-family:' + tagFontFamily + ';">' + tagValue +'</span><a class="qstag-tag-remove" id="' + tagIP + '"></a></p></div></li>';
