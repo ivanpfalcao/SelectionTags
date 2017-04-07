@@ -135,6 +135,7 @@ define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"
 			//Generate View
 			app = qlik.currApp(this);
 			var selectionState = app.selectionState;
+			var fieldNameTemp = "";
 			
             var selections = app.getList("CurrentSelections", function(reply) {
 				globalSelectedFields = reply.qSelectionObject.qSelections;
@@ -171,15 +172,20 @@ define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"
 				
 				
 				for (var i = 0; i < globalSelectedFieldsLength; i++) {
+						if (typeof globalSelectedFields[i].qReadableName === "undefined") {
+							fieldNameTemp = globalSelectedFields[i].qField;
+						} else {
+							fieldNameTemp = globalSelectedFields[i].qReadableName;
+						}					
 						
 						var selectedValues = globalSelectedFields[i].qSelected;
 						var splittedSelectedValues = selectedValues.split(", ");
 						//alert(globalSelectedFields[i].qField);
-						if (typeof dictBgColor[globalSelectedFields[i].qField] != '') {
+						if (typeof dictBgColor[fieldNameTemp] != '') {
 							//var tagBackgroundColor=palette[dictBgColor[globalSelectedFields[i].qField]];
 							//var tagFontColor=palette[dictFontColor[globalSelectedFields[i].qField]];
-							var tagBackgroundColor=dictBgColor[globalSelectedFields[i].qField];
-							var tagFontColor=dictFontColor[globalSelectedFields[i].qField];
+							var tagBackgroundColor=dictBgColor[fieldNameTemp];
+							var tagFontColor=dictFontColor[fieldNameTemp];
 							
 							var tagFontFamily='Arial';
 						} else {
@@ -191,16 +197,21 @@ define( ["qlik","jquery", "text!./src/SelectionTags.css", "text!./template.html"
 						
 						
 						for (var j = 0; j < splittedSelectedValues.length; j++) {
-							if (typeof dictAlias[globalSelectedFields[i].qField] === "undefined"
-								|| dictAlias[globalSelectedFields[i].qField] == "Field Label" 
-								|| dictAlias[globalSelectedFields[i].qField] == "") {
-								vAlias = globalSelectedFields[i].qField;
+							if (typeof globalSelectedFields[i].qReadableName === "undefined") {
+								fieldNameTemp = globalSelectedFields[i].qField;
 							} else {
-								var vAlias = dictAlias[globalSelectedFields[i].qField];
+								fieldNameTemp = globalSelectedFields[i].qReadableName;
+							}								
+							if (typeof dictAlias[fieldNameTemp] === "undefined"
+								|| dictAlias[fieldNameTemp] == "Field Label" 
+								|| dictAlias[fieldNameTemp] == "") {
+								vAlias = fieldNameTemp;
+							} else {
+								var vAlias = dictAlias[fieldNameTemp];
 							}
 							
 							var tagValue = vAlias + ' : ' + splittedSelectedValues[j];
-							var tagIP = globalSelectedFields[i].qField + '||-||' + splittedSelectedValues[j]+ '||-||' + i + '||-||' + j;
+							var tagIP = fieldNameTemp + '||-||' + splittedSelectedValues[j]+ '||-||' + i + '||-||' + j;
 							html+='<ul class="qstag-taglist">';
                      		html+='<li style="background-color:'+ tagBackgroundColor +';color:' + tagFontColor + ';opacity: 1;" data-tag="tag" class="qstag-tag"><div class="qstag-tag-content"><span class="qstag-tag-text"><p style="font-family:' + tagFontFamily + ';">' + tagValue +'</span><a class="qstag-tag-remove" id="' + tagIP + '"></a></p></div></li>';
 							html+='</ul>'
