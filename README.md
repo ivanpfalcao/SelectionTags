@@ -8,3 +8,5 @@ The extension works the same way as normal Qliksense selection, so, if you desel
 - V1.1: Now you can define the colors (background and font) for each tag using an hexadecimal (#FFFFFF) color.
 
 - V1.2: Field Label created: This option adds an alias for the dimension if needed.
+
+- V1.3: Corrected the label issue. Now, if you use a Master Dimension, the extension will use the field name instead of the calculation.
